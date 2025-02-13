@@ -7,7 +7,7 @@ def example():
         emoji="🎈",
         font_size=54,
         falling_speed=5,
-        animation_length="infinite",
+        animation_length="5",
     )
 example()
 st.markdown("Hello world")
