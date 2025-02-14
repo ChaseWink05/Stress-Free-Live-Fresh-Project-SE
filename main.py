@@ -14,7 +14,6 @@ def example():
         animation_length="5",
     )
 #example()
-st.markdown("Hello world")
 calendar_options = {
     "editable": True,
     "selectable": True,
