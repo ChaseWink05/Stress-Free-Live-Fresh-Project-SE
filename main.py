@@ -13,7 +13,7 @@ def example():
         falling_speed=5,
         animation_length="5",
     )
-example()
+#example()
 st.markdown("Hello world")
 calendar_options = {
     "editable": True,
