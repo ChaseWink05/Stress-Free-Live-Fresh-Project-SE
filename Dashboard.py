@@ -9,8 +9,6 @@ def main():
         {"date": "2025-04-15", "event": "Project Deadline"}
     ]
 
-
-
     # Streamlit App
     st.set_page_config(page_title="Student Dashboard", layout="wide")
 
@@ -59,5 +57,6 @@ def main():
         with col4:
             st.header("Done")
             todo.display_tasks("Done")
+
 if __name__ == "__main__":
     main()
