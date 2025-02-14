@@ -5,6 +5,7 @@ import Dashboard as DB
 import ToDoList as TDL
 
 DB.main()
+TDL.todo()
 def example():
     rain(
         emoji="🎈",
