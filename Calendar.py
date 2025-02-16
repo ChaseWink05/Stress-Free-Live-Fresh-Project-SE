@@ -39,24 +39,16 @@ def showCalendar():
 
         submitted = st.form_submit_button("Add Event")
 
-        try:
-            if submitted:
-                new_event = {
-                    "title": title,
-                    "color": color,
-                    "start": f"{start_date}T{start_time}",
-                    "end": f"{end_date}T{end_time}",
-                    "resourceId": resource_id,
-                }
-                st.session_state["events"].append(new_event)
-                st.success(f"Event '{title}' added!")
-
-                # Trigger a page refresh
-                st.rerun()
-
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
+        if submitted:
+            new_event = {
+                "title": title,
+                "color": color,
+                "start": f"{start_date}T{start_time}",
+                "end": f"{end_date}T{end_time}",
+                "resourceId": resource_id,
+            }
+            st.session_state["events"].append(new_event)
+            st.success(f"Event '{title}' added!")
 
     # Calendar resources
     calendar_resources = [
