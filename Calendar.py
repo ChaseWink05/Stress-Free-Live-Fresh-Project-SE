@@ -52,7 +52,7 @@ def showCalendar():
                 st.success(f"Event '{title}' added!")
 
                 # Trigger a page refresh
-                st.experimental_rerun()
+                st.rerun()
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
