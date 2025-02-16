@@ -40,7 +40,6 @@ def showCalendar():
         submitted = st.form_submit_button("Add Event")
 
         if submitted:
-            st.rerun()
             new_event = {
                 "title": title,
                 "color": color,
@@ -50,6 +49,7 @@ def showCalendar():
             }
             st.session_state["events"].append(new_event)
             st.success(f"Event '{title}' added!")
+            st.rerun()
 
     # Calendar resources
     calendar_resources = [
