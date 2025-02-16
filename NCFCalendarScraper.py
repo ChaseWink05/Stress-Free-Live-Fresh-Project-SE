@@ -1,3 +1,5 @@
+#this class handles the NCF Academic Calendar Website Scraper
+
 import streamlit as st
 import requests
 from bs4 import BeautifulSoup
