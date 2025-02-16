@@ -49,6 +49,7 @@ def showCalendar():
             }
             st.session_state["events"].append(new_event)
             st.success(f"Event '{title}' added!")
+            st.experimental_rerun()  # This will trigger a page refresh
 
     # Calendar resources
     calendar_resources = [
