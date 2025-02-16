@@ -5,8 +5,13 @@ from Timer import timer
 from streamlit_calendar import calendar
 from NCFCalendarScraper import scraper_page  # Import scraper page
 
+<<<<<<< Updated upstream
 def main():
     st.set_page_config(page_title="Student Dashboard", layout="wide")
+=======
+    # Streamlit App
+    #st.set_page_config(page_title="Student Dashboard", layout="wide")
+>>>>>>> Stashed changes
 
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Dashboard", "Scheduler", "To-Do List", "NCF Website Scraper", "Magic Wand"])

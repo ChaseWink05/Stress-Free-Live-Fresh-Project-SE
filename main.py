@@ -2,8 +2,17 @@ import streamlit as st
 from streamlit_extras.let_it_rain import rain
 from streamlit_calendar import calendar
 import Dashboard as DB
+<<<<<<< Updated upstream
 import ToDoList as TDL
 
+=======
+import Calendar
+
+# Set page config as the first Streamlit command
+st.set_page_config(page_title="Interactive Calendar", page_icon="📆")
+
+#Test if you can see this
+>>>>>>> Stashed changes
 DB.main()
 TDL.todo()
 def example():
@@ -14,6 +23,7 @@ def example():
         animation_length="5",
     )
 #example()
+<<<<<<< Updated upstream
 calendar_options = {
     "editable": True,
     "selectable": True,
@@ -77,3 +87,6 @@ calendar = calendar(
     key='calendar', # Assign a widget key to prevent state loss
     )
 st.write(calendar)
+=======
+Calendar.showCalendar()
+>>>>>>> Stashed changes
