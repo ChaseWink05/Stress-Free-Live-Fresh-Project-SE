@@ -40,7 +40,7 @@ def showCalendar():
         submitted = st.form_submit_button("Add Event")
 
         if submitted:
-            st.rerun
+            st.rerun()
             new_event = {
                 "title": title,
                 "color": color,
