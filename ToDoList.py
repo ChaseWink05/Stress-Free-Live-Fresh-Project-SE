@@ -2,7 +2,7 @@
 
 import streamlit as st
 import pandas as pd
-
+from Timer import timer
 
 class todo:
     def __init__(self):
@@ -22,4 +22,9 @@ class todo:
         if 'todoList' in st.session_state and st.session_state['todoList']:
             for i, task in enumerate(st.session_state['todoList']):
                 if task["label"] == label:
-                    st.checkbox(task["task"], value=task["done"], key=f"{label}_{i}")
+                    if st.checkbox(task["task"], value=task["done"], key=f"{label}_{i}"):
+                        if not task["done"]:
+                            task["done"] = True
+                            st.balloons()
+
+
