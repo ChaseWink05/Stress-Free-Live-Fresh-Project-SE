@@ -1,9 +1,8 @@
-#this class handles the NCF Academic Calendar Website Scraper
-
 import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import datetime
 
 class NCFCalendarScraper:
     def __init__(self, url="https://www.ncf.edu/academics/academic-calendar/"):
@@ -11,7 +10,7 @@ class NCFCalendarScraper:
         self.academic_events = []
 
     def fetch_calendar(self):
-        """Fetches the NCF academic calendar with a user-agent header."""
+        """Fetches the NCF academic calendar and parses events."""
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
         }
@@ -26,9 +25,19 @@ class NCFCalendarScraper:
                 for row in rows:
                     cols = row.find_all("td")
                     if len(cols) == 2:
-                        date = cols[0].text.strip()
-                        event = cols[1].text.strip()
-                        self.academic_events.append({"date": date, "event": event})
+                        date_text = cols[0].text.strip()
+                        event_text = cols[1].text.strip()
+
+                        # Convert date to proper format (YYYY-MM-DD)
+                        try:
+                            event_date = datetime.datetime.strptime(date_text, "%a, %b %d").replace(year=datetime.datetime.today().year).date()
+                        except ValueError:
+                            continue  # Skip invalid dates
+
+                        self.academic_events.append({
+                            "date": str(event_date),
+                            "event": event_text
+                        })
 
             return self.academic_events
         except requests.exceptions.RequestException as e:
@@ -45,28 +54,40 @@ def scraper_page():
 
     scraper = NCFCalendarScraper()
 
+    # Ensure scraped events are stored temporarily before adding them to the calendar
+    if "scraped_events" not in st.session_state:
+        st.session_state["scraped_events"] = []
+
     if st.button("Scrape NCF Calendar"):
-        events = scraper.fetch_calendar()
-        if events:
+        scraped_events = scraper.fetch_calendar()
+        if scraped_events:
+            st.session_state["scraped_events"] = scraped_events  # Store in session state
             df = scraper.get_dataframe()
-            st.success(f"Successfully scraped {len(events)} events!")
+            st.success(f"Successfully scraped {len(scraped_events)} events!")
             st.write(df)
-
-            # Button to add events to the calendar
-            if st.button("Add Events to Calendar"):
-                if "calendar_events" not in st.session_state:
-                    st.session_state["calendar_events"] = []
-
-                # Convert events into calendar format and store in session state
-                for event in events:
-                    event_data = {
-                        "title": event["event"],
-                        "start": event["date"],
-                        "end": event["date"]
-                    }
-                    if event_data not in st.session_state["calendar_events"]:
-                        st.session_state["calendar_events"].append(event_data)
-
-                st.success("Events added to your calendar! Go to the Dashboard to see them.")
         else:
             st.warning("No events found. Please try again later.")
+
+    # Only show this button if events were scraped
+    if st.session_state["scraped_events"]:
+        if st.button("Add Events to Calendar"):
+            if "events" not in st.session_state:
+                st.session_state["events"] = []  # Ensure events list exists
+
+            # Convert events into the format used in `calendar.py`
+            for event in st.session_state["scraped_events"]:
+                new_event = {
+                    "title": event["event"],
+                    "color": "#FF5733",  # Default color
+                    "start": f"{event['date']}T09:00:00",  # Default 9 AM
+                    "end": f"{event['date']}T10:00:00",  # Default 10 AM
+                    "resourceId": "a"  # Assign default resource
+                }
+
+                # Ensure we are not duplicating events
+                if new_event not in st.session_state["events"]:
+                    st.session_state["events"].append(new_event)
+
+            # Clear scraped events after adding
+            st.session_state["scraped_events"] = []
+            st.success("✅ Events added to your calendar! Go to the Dashboard to see them.")

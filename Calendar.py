@@ -7,7 +7,12 @@ def showCalendar():
     st.markdown("## Interactive Calendar with Event Input 📆")
 
     # Ensure session state contains an event list
-    st.session_state.setdefault("events", [])
+    if "events" not in st.session_state:
+        st.session_state["events"] = []
+
+    # Debugging Output
+    st.write("### Current Events in Calendar (Debugging)")
+    st.write(st.session_state["events"])  # Check session state
 
     # Calendar mode selection
     mode = st.selectbox(
@@ -23,6 +28,7 @@ def showCalendar():
             "multimonth",
         ),
     )
+
     # Event input form
     with st.form("event_form"):
         st.write("### Add a New Event")
@@ -47,8 +53,9 @@ def showCalendar():
                 "end": f"{end_date}T{end_time}",
                 "resourceId": resource_id,
             }
-            st.session_state["events"].append(new_event)
-            st.success(f"Event '{title}' added!")
+            if new_event not in st.session_state["events"]:
+                st.session_state["events"].append(new_event)
+                st.success(f"✅ Event '{title}' added!")
 
     # Calendar resources
     calendar_resources = [
@@ -68,62 +75,7 @@ def showCalendar():
         "selectable": True,
     }
 
-    if "resource" in mode:
-        if mode == "resource-daygrid":
-            calendar_options.update({
-                "initialDate": str(datetime.date.today()),
-                "initialView": "resourceDayGridDay",
-                "resourceGroupField": "building",
-            })
-        elif mode == "resource-timeline":
-            calendar_options.update({
-                "headerToolbar": {
-                    "left": "today prev,next",
-                    "center": "title",
-                    "right": "resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth",
-                },
-                "initialDate": str(datetime.date.today()),
-                "initialView": "resourceTimelineDay",
-                "resourceGroupField": "building",
-            })
-        elif mode == "resource-timegrid":
-            calendar_options.update({
-                "initialDate": str(datetime.date.today()),
-                "initialView": "resourceTimeGridDay",
-                "resourceGroupField": "building",
-            })
-    else:
-        if mode == "daygrid":
-            calendar_options.update({
-                "headerToolbar": {
-                    "left": "today prev,next",
-                    "center": "title",
-                    "right": "dayGridDay,dayGridWeek,dayGridMonth",
-                },
-                "initialDate": str(datetime.date.today()),
-                "initialView": "dayGridMonth",
-            })
-        elif mode == "timegrid":
-            calendar_options.update({"initialView": "timeGridWeek"})
-        elif mode == "timeline":
-            calendar_options.update({
-                "headerToolbar": {
-                    "left": "today prev,next",
-                    "center": "title",
-                    "right": "timelineDay,timelineWeek,timelineMonth",
-                },
-                "initialDate": str(datetime.date.today()),
-                "initialView": "timelineMonth",
-            })
-        elif mode == "list":
-            calendar_options.update({
-                "initialDate": str(datetime.date.today()),
-                "initialView": "listMonth",
-            })
-        elif mode == "multimonth":
-            calendar_options.update({"initialView": "multiMonthYear"})
-
-    # Display calendar with user-inputted events
+    # Display calendar with user-inputted & scraped events
     state = calendar(
         events=st.session_state["events"],
         options=calendar_options,
@@ -146,7 +98,7 @@ def showCalendar():
 
     # Update session state when events are modified in the UI
     if state.get("eventsSet") is not None:
-        if isinstance(state["eventsSet"], list):  # Ensure correct type
+        if isinstance(state["eventsSet"], list):
             st.session_state["events"] = state["eventsSet"]
 
     st.write(state)
