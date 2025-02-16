@@ -21,28 +21,7 @@ def main():
         else:
             st.write("No upcoming events.")
 
-        # Display Calendar
-        st.subheader("📆 Calendar")
-        calendar_options = {
-            "editable": True,
-            "selectable": True,
-            "headerToolbar": {
-                "left": "today prev,next",
-                "center": "title",
-                "right": "resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth",
-            },
-            "slotMinTime": "06:00:00",
-            "slotMaxTime": "18:00:00",
-            "initialView": "resourceTimelineDay",
-        }
-
-        # Load events from session state
-        if "calendar_events" not in st.session_state:
-            st.session_state["calendar_events"] = []
-
-        # Display the calendar
-        calendar(events=st.session_state["calendar_events"], options=calendar_options, key="calendar")
-
+        
         # Display To-Do List
         st.subheader("✅ To-Do List")
         todo = ToDoList.todo()
