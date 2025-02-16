@@ -18,6 +18,7 @@ class todo:
         else:
             st.error("Please enter a task")
 
+    #Goes through the list of tasks and displays them based on the label
     def display_tasks(self, label):
         if 'todoList' in st.session_state and st.session_state['todoList']:
             for i, task in enumerate(st.session_state['todoList']):
