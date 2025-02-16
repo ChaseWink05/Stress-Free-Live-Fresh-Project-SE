@@ -23,7 +23,6 @@ def showCalendar():
             "multimonth",
         ),
     )
-
     # Event input form
     with st.form("event_form"):
         st.write("### Add a New Event")
@@ -41,6 +40,7 @@ def showCalendar():
         submitted = st.form_submit_button("Add Event")
 
         if submitted:
+            st.rerun
             new_event = {
                 "title": title,
                 "color": color,
