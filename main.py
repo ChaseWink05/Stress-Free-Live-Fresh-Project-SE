@@ -2,10 +2,8 @@ import streamlit as st
 from streamlit_extras.let_it_rain import rain
 from streamlit_calendar import calendar
 import Dashboard as DB
-import ToDoList as TDL
-#Does this work Anson?
+
 DB.main()
-TDL.todo()
 def example():
     rain(
         emoji="🎈",
@@ -13,7 +11,8 @@ def example():
         falling_speed=5,
         animation_length="5",
     )
-#example()
+example()
+st.markdown("Hello world")
 calendar_options = {
     "editable": True,
     "selectable": True,
