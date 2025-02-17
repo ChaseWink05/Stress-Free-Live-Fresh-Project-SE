@@ -4,6 +4,7 @@ import ToDoList
 from Timer import Timer
 from streamlit_calendar import calendar
 from NCFCalendarScraper import scraper_page  # Import scraper page
+import Calendar
 
 def main():
     st.sidebar.title("Navigation")
@@ -20,7 +21,7 @@ def main():
                 st.write(f"**{event['start']}** - {event['title']}")
         else:
             st.write("No upcoming events.")
-
+        Calendar.showCalendar()
         
         # Display To-Do List
         st.subheader("✅ To-Do List")
