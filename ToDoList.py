@@ -2,7 +2,7 @@
 
 import streamlit as st
 import pandas as pd
-from Timer import timer
+from Timer import Timer
 
 class todo:
     def __init__(self):

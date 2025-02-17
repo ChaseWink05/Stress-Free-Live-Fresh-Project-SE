@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 import ToDoList
-from Timer import timer
+from Timer import Timer
 from streamlit_calendar import calendar
 from NCFCalendarScraper import scraper_page  # Import scraper page
 
@@ -39,12 +39,21 @@ def main():
         col1, col2, col3, col4 = st.columns(4)
 
         # Timer integration
-        minutes = st.sidebar.number_input("Set a timer (minutes)", min_value=0, max_value=60)
-        Timer = timer()
-        if st.sidebar.button("Start Timer"):
-            Timer.countdown(minutes)
-        if st.sidebar.button("End Timer"):
-            st.sidebar.write(f"Timer ended. Total time: {Timer.stop()} seconds")
+        timer = Timer()
+
+        # Sidebar Timer Controls
+        minutes = st.sidebar.number_input("Set Timer (minutes)", min_value=1, max_value=60, value=5)
+        start_button = st.sidebar.button("Start Timer")
+        stop_button = st.sidebar.button("Stop Timer")
+
+        # Start Timer
+        if start_button and not st.session_state.timer_running:
+            timer.start_timer(minutes)
+            timer.display_timer()
+
+        # Stop Timer
+        if stop_button:
+            timer.stop_timer()
 
         with col1:
             st.header("Create")
