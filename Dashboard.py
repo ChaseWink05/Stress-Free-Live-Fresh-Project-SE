@@ -85,7 +85,7 @@ def main():
                     st.error("Invalid note number. Please enter a valid number.")
             else:
                 st.error("Please enter a valid number.")
-
+  
 
     elif page == "Scheduler":
         st.title("📅 Scheduler")
