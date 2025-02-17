@@ -28,6 +28,65 @@ def main():
         todo = ToDoList.todo()
         todo.display_tasks("Important")
 
+       # Sticky Notes Section
+        st.subheader("📝 Sticky Notes")
+
+        if "sticky_notes" not in st.session_state:
+            st.session_state.sticky_notes = []  # List to store multiple sticky notes
+
+        note_input = st.text_area("Write your note:", height=100)
+
+        if st.button("Submit"):
+            if note_input.strip():  # Prevent empty notes
+                cleaned_note = note_input.strip()  # Remove leading/trailing newlines
+                st.session_state.sticky_notes.append(cleaned_note)
+
+        # Display Submitted Sticky Notes
+        if st.session_state.sticky_notes:
+            st.write("### 🗒️ Your Sticky Notes:")
+            # Display sticky notes with corresponding number
+            for idx, note in enumerate(st.session_state.sticky_notes[::-1]):  # Display most recent first
+                note_number = len(st.session_state.sticky_notes) - idx  # Number corresponding to the note
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color: #FFEB3B;
+                        padding: 10px;
+                        margin: 5px 0;
+                        margin-top: 0;
+                        padding-top: 0;
+                        border-radius: 5px;
+                        box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: black;
+                        max-width: 400px;
+                        word-wrap: break-word;
+                        white-space: pre-wrap;
+                        overflow-wrap: break-word;">
+                        <strong>{note_number}:</strong> {note}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        # Input to delete a sticky note by its number
+        note_to_delete = st.text_input("Enter the number of the sticky note you want to delete:")
+
+        if st.button("Delete"):
+            if note_to_delete.isdigit():
+                note_to_delete = int(note_to_delete)
+                if 1 <= note_to_delete <= len(st.session_state.sticky_notes):
+                    # Remove the sticky note with the corresponding number
+                    st.session_state.sticky_notes.pop(len(st.session_state.sticky_notes) - note_to_delete)
+                    st.success(f"Sticky Note #{note_to_delete} deleted.")
+                    st.rerun()  # Rerun to refresh the page and remove the deleted sticky note
+                else:
+                    st.error("Invalid note number. Please enter a valid number.")
+            else:
+                st.error("Please enter a valid number.")
+
+
     elif page == "Scheduler":
         st.title("📅 Scheduler")
         st.write("Here you can manage your class schedule and deadlines.")
