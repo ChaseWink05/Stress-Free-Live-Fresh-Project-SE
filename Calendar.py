@@ -11,8 +11,8 @@ def showCalendar():
         st.session_state["events"] = []
 
     # Debugging Output
-    st.write("### Current Events in Calendar (Debugging)")
-    st.write(st.session_state["events"])  # Check session state
+    #st.write("### Current Events in Calendar (Debugging)")
+    #st.write(st.session_state["events"])  # Check session state
 
     # Calendar mode selection
     mode = st.selectbox(
