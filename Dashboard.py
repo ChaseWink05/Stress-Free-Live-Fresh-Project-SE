@@ -7,7 +7,7 @@ from NCFCalendarScraper import scraper_page  # Import scraper page
 import Calendar
 from datetime import datetime, timedelta
 
-
+from MagicWand import magic_wand
 def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Dashboard", "Scheduler", "To-Do List", "NCF Website Scraper", "Magic Wand"])
@@ -149,6 +149,10 @@ def main():
 
     elif page == "NCF Website Scraper":
         scraper_page()  # Load the scraper page
+        
+    elif page == "Magic Wand":
+        magic_wand()
+        
 
 if __name__ == "__main__":
     main()
