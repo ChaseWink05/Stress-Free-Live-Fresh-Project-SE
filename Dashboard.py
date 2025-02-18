@@ -5,6 +5,8 @@ from Timer import Timer
 from streamlit_calendar import calendar
 from NCFCalendarScraper import scraper_page  # Import scraper page
 import Calendar
+from datetime import datetime, timedelta
+
 
 def main():
     st.sidebar.title("Navigation")
@@ -14,13 +16,27 @@ def main():
         st.title("📌 Student Dashboard")
         st.write("Welcome to your student dashboard! Here you can see your upcoming events and tasks at a glance.")
 
-        # Display upcoming events
-        st.subheader("📅 Upcoming Events")
-        if "calendar_events" in st.session_state and st.session_state["calendar_events"]:
-            for event in st.session_state["calendar_events"]:
-                st.write(f"**{event['start']}** - {event['title']}")
-        else:
-            st.write("No upcoming events.")
+        st.subheader("📅 Upcoming Events (Next 7 Days)")
+
+        if "events" in st.session_state and st.session_state["events"]:
+            now = datetime.now()
+            one_week_later = now + timedelta(days=7)  # Define the 7-day window
+
+            # Filter events occurring within the next 7 days
+            upcoming_events = [
+                event for event in st.session_state["events"]
+                if now <= datetime.fromisoformat(event["start"]) <= one_week_later
+            ]
+
+            # Sort events by date
+            upcoming_events.sort(key=lambda e: datetime.fromisoformat(e["start"]))
+
+            if upcoming_events:
+                for event in upcoming_events:
+                    st.write(f"📆 **{event['start']}** - {event['title']}")  
+            else:
+                st.write("No upcoming events in the next 7 days.")
+        
         Calendar.showCalendar()
         
         # Display To-Do List
