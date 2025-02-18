@@ -12,7 +12,7 @@ class NCFCalendarScraper:
     def fetch_calendar(self):
         """Fetches the NCF academic calendar and parses events."""
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
         }
         try:
             response = requests.get(self.url, headers=headers)
@@ -74,19 +74,21 @@ def scraper_page():
             if "events" not in st.session_state:
                 st.session_state["events"] = []  # Ensure events list exists
 
+            # Create a set of existing event titles in the calendar
+            existing_event_titles = {event["title"] for event in st.session_state["events"]}
+
             # Convert events into the format used in `calendar.py`
             for event in st.session_state["scraped_events"]:
-                new_event = {
-                    "title": event["event"],
-                    "color": "#FF5733",  # Default color
-                    "start": f"{event['date']}T09:00:00",  # Default 9 AM
-                    "end": f"{event['date']}T10:00:00",  # Default 10 AM
-                    "resourceId": "a"  # Assign default resource
-                }
-
-                # Ensure we are not duplicating events
-                if new_event not in st.session_state["events"]:
+                if event["event"] not in existing_event_titles:  # Prevent duplicates
+                    new_event = {
+                        "title": event["event"],
+                        "color": "#FF5733",  # Default color
+                        "start": f"{event['date']}T09:00:00",  # Default 9 AM
+                        "end": f"{event['date']}T10:00:00",  # Default 10 AM
+                        "resourceId": "a"  # Assign default resource
+                    }
                     st.session_state["events"].append(new_event)
+                    existing_event_titles.add(event["event"])  # Add to set to track duplicates
 
             # Clear scraped events after adding
             st.session_state["scraped_events"] = []

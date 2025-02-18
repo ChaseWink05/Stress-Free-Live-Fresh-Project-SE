@@ -125,7 +125,7 @@ def main():
             st.header("Doing")
             todo.display_tasks("In Progress")
         with col3:
-            st.header("IMPORTANT")
+            st.header("Important")
             todo.display_tasks("Important")
         with col4:
             st.header("Done")
