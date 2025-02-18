@@ -8,7 +8,7 @@ def showCalendar():
 
     # Ensure session state contains an event list
     if "events" not in st.session_state:
-        st.session_state["events"] = []
+        st.session_state["events"] = []  
 
     # Debugging Output
     #st.write("### Current Events in Calendar (Debugging)")
