@@ -10,9 +10,6 @@ def showCalendar():
     if "events" not in st.session_state:
         st.session_state["events"] = []  
 
-    # Debugging Output
-    #st.write("### Current Events in Calendar (Debugging)")
-    #st.write(st.session_state["events"])  # Check session state
 
     # Calendar mode selection
     mode = st.selectbox(
@@ -101,4 +98,4 @@ def showCalendar():
         if isinstance(state["eventsSet"], list):
             st.session_state["events"] = state["eventsSet"]
 
-    st.write(state)
+    
