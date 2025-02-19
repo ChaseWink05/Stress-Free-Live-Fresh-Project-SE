@@ -3,3 +3,4 @@ streamlit-extras
 streamlit_calendar
 datetime
 timedelta
+uuid

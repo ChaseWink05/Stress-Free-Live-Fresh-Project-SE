@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_calendar import calendar
 import datetime
+import uuid
 
 def showCalendar():
 
@@ -8,8 +9,11 @@ def showCalendar():
 
     # Ensure session state contains an event list
     if "events" not in st.session_state:
-        st.session_state["events"] = []  
+        st.session_state["events"] = []
 
+    # Ensure session state contains a selected event
+    if "selected_event" not in st.session_state:
+        st.session_state["selected_event"] = None
 
     # Calendar mode selection
     mode = st.selectbox(
@@ -44,13 +48,14 @@ def showCalendar():
 
         if submitted:
             new_event = {
+                "id": str(uuid.uuid4()),  # Add unique id
                 "title": title,
                 "color": color,
                 "start": f"{start_date}T{start_time}",
                 "end": f"{end_date}T{end_time}",
                 "resourceId": resource_id,
             }
-            if new_event not in st.session_state["events"]:
+            if new_event not in st.session_state["events"] and new_event["title"]:
                 st.session_state["events"].append(new_event)
                 st.success(f"✅ Event '{title}' added!")
 
@@ -98,4 +103,43 @@ def showCalendar():
         if isinstance(state["eventsSet"], list):
             st.session_state["events"] = state["eventsSet"]
 
-    
+    # Handle event click
+    if state.get("eventClick") is not None:
+        event_id = state["eventClick"]["event"]["id"]
+        st.session_state["selected_event"] = next(
+            (event for event in st.session_state["events"] if event["id"] == event_id), None
+        )
+
+    # Edit or delete selected event
+    if st.session_state["selected_event"]:
+        with st.form("edit_event_form"):
+            st.write("### Edit Event")
+
+            title = st.text_input("Event Title", st.session_state["selected_event"]["title"])
+            color = st.color_picker("Pick a Color", st.session_state["selected_event"]["color"])
+            start_date = st.date_input("Start Date", datetime.date.fromisoformat(st.session_state["selected_event"]["start"].split("T")[0]))
+            end_date = st.date_input("End Date", datetime.date.fromisoformat(st.session_state["selected_event"]["end"].split("T")[0]))
+            start_time = st.time_input("Start Time", datetime.time.fromisoformat(st.session_state["selected_event"]["start"].split("T")[1]))
+            end_time = st.time_input("End Time", datetime.time.fromisoformat(st.session_state["selected_event"]["end"].split("T")[1]))
+            resource_id = st.selectbox(
+                "Resource ID", ["a", "b", "c", "d", "e", "f"], index=["a", "b", "c", "d", "e", "f"].index(st.session_state["selected_event"]["resourceId"])
+            )
+
+            update_submitted = st.form_submit_button("Update Event")
+            delete_submitted = st.form_submit_button("Delete Event")
+
+            if update_submitted:
+                st.session_state["selected_event"].update({
+                    "title": title,
+                    "color": color,
+                    "start": f"{start_date}T{start_time}",
+                    "end": f"{end_date}T{end_time}",
+                    "resourceId": resource_id,
+                })
+                st.success(f"✅ Event '{title}' updated!")
+                st.session_state["selected_event"] = None
+
+            if delete_submitted:
+                st.session_state["events"].remove(st.session_state["selected_event"])
+                st.success(f"✅ Event '{title}' deleted!")
+                st.session_state["selected_event"] = None
