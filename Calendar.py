@@ -34,6 +34,7 @@ def showCalendar():
     with st.form("event_form"):
         st.write("### Add a New Event")
 
+        # Input fields for event details
         title = st.text_input("Event Title")
         color = st.color_picker("Pick a Color", "#FF6C6C")
         start_date = st.date_input("Start Date", datetime.date.today())
@@ -44,19 +45,30 @@ def showCalendar():
             "Resource ID", ["a", "b", "c", "d", "e", "f"], index=0
         )
 
+        # Submit button for the form
         submitted = st.form_submit_button("Add Event")
 
         if submitted:
-            new_event = {
-                "id": str(uuid.uuid4()),  # Add unique id
-                "title": title,
-                "color": color,
-                "start": f"{start_date}T{start_time}",
-                "end": f"{end_date}T{end_time}",
-                "resourceId": resource_id,
-            }
-            if new_event not in st.session_state["events"] and new_event["title"]:
-                st.session_state["events"].append(new_event)
+            # Check if the end date is before the start date
+            if end_date < start_date:
+                st.error("End date cannot be before start date. Please select a valid date range.")
+            else:
+                # Calculate the number of days between start and end dates
+                num_days = (end_date - start_date).days + 1
+
+                # Create separate events for each day within the date range
+                for i in range(num_days):
+                    event_date = start_date + datetime.timedelta(days=i)
+                    new_event = {
+                        "id": str(uuid.uuid4()),  # Add unique id
+                        "title": title,
+                        "color": color,
+                        "start": f"{event_date}T{start_time}",
+                        "end": f"{event_date}T{end_time}",
+                        "resourceId": resource_id,
+                    }
+                    if new_event not in st.session_state["events"] and new_event["title"]:
+                        st.session_state["events"].append(new_event)
                 st.success(f"✅ Event '{title}' added!")
 
     # Calendar resources
@@ -115,6 +127,7 @@ def showCalendar():
         with st.form("edit_event_form"):
             st.write("### Edit Event")
 
+            # Input fields for editing event details
             title = st.text_input("Event Title", st.session_state["selected_event"]["title"])
             color = st.color_picker("Pick a Color", st.session_state["selected_event"]["color"])
             start_date = st.date_input("Start Date", datetime.date.fromisoformat(st.session_state["selected_event"]["start"].split("T")[0]))
@@ -125,6 +138,7 @@ def showCalendar():
                 "Resource ID", ["a", "b", "c", "d", "e", "f"], index=["a", "b", "c", "d", "e", "f"].index(st.session_state["selected_event"]["resourceId"])
             )
 
+            # Submit buttons for updating or deleting the event
             update_submitted = st.form_submit_button("Update Event")
             delete_submitted = st.form_submit_button("Delete Event")
 
