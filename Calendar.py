@@ -69,7 +69,6 @@ def showCalendar():
                     }
                     if new_event not in st.session_state["events"] and new_event["title"]:
                         st.session_state["events"].append(new_event)
-                st.rerun()        
                 st.success(f"✅ Event '{title}' added!")
                 
 
