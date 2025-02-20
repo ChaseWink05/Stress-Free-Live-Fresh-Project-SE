@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import datetime
+import uuid
 
 class NCFCalendarScraper:
     def __init__(self, url="https://www.ncf.edu/academics/academic-calendar/"):
@@ -81,6 +82,7 @@ def scraper_page():
             for event in st.session_state["scraped_events"]:
                 if event["event"] not in existing_event_titles:  # Prevent duplicates
                     new_event = {
+                        "id": str(uuid.uuid4()),  # Add unique id
                         "title": event["event"],
                         "color": "#FF5733",  # Default color
                         "start": f"{event['date']}T09:00:00",  # Default 9 AM
