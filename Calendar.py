@@ -84,11 +84,66 @@ def showCalendar():
 
     # Calendar options
     calendar_options = {
-        "editable": True,
-        "navLinks": True,
+        "editable": "true",
+        "navLinks": "true",
         "resources": calendar_resources,
-        "selectable": True,
+        "selectable": "true",
     }
+
+    if "resource" in mode:
+        if mode == "resource-daygrid":
+            calendar_options.update({
+                "initialDate": str(datetime.date.today()),
+                "initialView": "resourceDayGridDay",
+                "resourceGroupField": "building",
+            })
+        elif mode == "resource-timeline":
+            calendar_options.update({
+                "headerToolbar": {
+                    "left": "today prev,next",
+                    "center": "title",
+                    "right": "resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth",
+                },
+                "initialDate": str(datetime.date.today()),
+                "initialView": "resourceTimelineDay",
+                "resourceGroupField": "building",
+            })
+        elif mode == "resource-timegrid":
+            calendar_options.update({
+                "initialDate": str(datetime.date.today()),
+                "initialView": "resourceTimeGridDay",
+                "resourceGroupField": "building",
+            })
+    else:
+        if mode == "daygrid":
+            calendar_options.update({
+                "headerToolbar": {
+                    "left": "today prev,next",
+                    "center": "title",
+                    "right": "dayGridDay,dayGridWeek,dayGridMonth",
+                },
+                "initialDate": str(datetime.date.today()),
+                "initialView": "dayGridMonth",
+            })
+        elif mode == "timegrid":
+            calendar_options.update({"initialView": "timeGridWeek"})
+        elif mode == "timeline":
+            calendar_options.update({
+                "headerToolbar": {
+                    "left": "today prev,next",
+                    "center": "title",
+                    "right": "timelineDay,timelineWeek,timelineMonth",
+                },
+                "initialDate": str(datetime.date.today()),
+                "initialView": "timelineMonth",
+            })
+        elif mode == "list":
+            calendar_options.update({
+                "initialDate": str(datetime.date.today()),
+                "initialView": "listMonth",
+            })
+        elif mode == "multimonth":
+            calendar_options.update({"initialView": "multiMonthYear"})
 
     # Display calendar with user-inputted & scraped events
     state = calendar(
