@@ -5,6 +5,7 @@ from NCFCalendarScraper import scraper_page  # Import scraper page
 import Calendar
 from datetime import datetime, timedelta
 from MagicWand import magic_wand
+from Scheduler import popup
 
 
 def main():
@@ -152,6 +153,9 @@ def main():
         
     elif page == "Magic Wand":
         magic_wand()
+
+    elif page == "Scheduler":
+        popup()
         
 
 if __name__ == "__main__":
