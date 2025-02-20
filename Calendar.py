@@ -70,15 +70,7 @@ def showCalendar():
                     if new_event not in st.session_state["events"] and new_event["title"]:
                         st.session_state["events"].append(new_event)
                 st.success(f"✅ Event '{title}' added!")
-
-    # Collapsible section for upcoming events
-    with st.expander("Upcoming Events"):
-        upcoming_events = [event for event in st.session_state["events"] if datetime.date.fromisoformat(event["start"].split("T")[0]) <= datetime.date.today() + datetime.timedelta(days=7)]
-        if upcoming_events:
-            for event in upcoming_events:
-                st.write(f"**{event['title']}**: {event['start']} - {event['end']}")
-        else:
-            st.write("No upcoming events in the next 7 days.")
+                
 
     # Calendar resources
     calendar_resources = [
