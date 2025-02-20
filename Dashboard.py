@@ -1,13 +1,12 @@
 import streamlit as st
-import random
 import ToDoList
-from Timer import Timer
-from streamlit_calendar import calendar
+from Timer import Timer 
 from NCFCalendarScraper import scraper_page  # Import scraper page
 import Calendar
 from datetime import datetime, timedelta
-
 from MagicWand import magic_wand
+
+
 def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Dashboard", "Scheduler", "To-Do List", "NCF Website Scraper", "Magic Wand"])
@@ -31,11 +30,12 @@ def main():
             # Sort events by date
             upcoming_events.sort(key=lambda e: datetime.fromisoformat(e["start"]))
 
-            if upcoming_events:
-                for event in upcoming_events:
-                    st.write(f"📆 **{event['start']}** - {event['title']}")  
-            else:
-                st.write("No upcoming events in the next 7 days.")
+            with st.expander("Upcoming Events"):
+                if upcoming_events:
+                    for event in upcoming_events:
+                        st.write(f"📆 **{event['start']}** - {event['title']}")  
+                else:
+                    st.write("No upcoming events in the next 7 days.")
         
         Calendar.showCalendar()
         
