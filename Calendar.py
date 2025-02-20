@@ -154,7 +154,7 @@ def showCalendar():
         }
         .fc-event-time {
             font-style: italic;
-        }
+        } 
         .fc-event-title {
             font-weight: 700;
         }
