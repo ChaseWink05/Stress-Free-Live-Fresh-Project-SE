@@ -70,7 +70,6 @@ def showCalendar():
                     if new_event not in st.session_state["events"] and new_event["title"]:
                         st.session_state["events"].append(new_event)
                 st.success(f"✅ Event '{title}' added!")
-                
 
     # Calendar resources
     calendar_resources = [
@@ -163,7 +162,10 @@ def showCalendar():
             font-size: 2rem;
         }
         """,
-        key=mode,
+        key=f"{mode}-{len(st.session_state['events'])}",  # Unique key to force re-render
+        #The `key` parameter in the `calendar` function is used to force Streamlit to re-render the calendar component whenever the key changes. 
+        #By setting the key to a unique value that changes when the number of events or the calendar mode changes, 
+        #it ensure that the calendar is updated to reflect the latest state.
     )
 
     # Update session state when events are modified in the UI
@@ -208,8 +210,11 @@ def showCalendar():
                 })
                 st.success(f"✅ Event '{title}' updated!")
                 st.session_state["selected_event"] = None
+                
 
             if delete_submitted:
                 st.session_state["events"].remove(st.session_state["selected_event"])
                 st.success(f"✅ Event '{title}' deleted!")
                 st.session_state["selected_event"] = None
+                st.rerun()
+            
