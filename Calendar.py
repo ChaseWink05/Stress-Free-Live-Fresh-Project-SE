@@ -202,6 +202,7 @@ def showCalendar():
             # Submit buttons for updating or deleting the event
             update_submitted = st.form_submit_button("Update Event")
             delete_submitted = st.form_submit_button("Delete Event")
+            
 
             if update_submitted:
                 st.session_state["selected_event"].update({
