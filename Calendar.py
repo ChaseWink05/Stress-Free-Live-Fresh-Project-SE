@@ -16,6 +16,7 @@ def showCalendar():
         st.session_state["selected_event"] = None
 
     # Calendar mode selection
+    st.header("Calendar Mode Selection")
     mode = st.selectbox(
         "Calendar Mode:",
         (
@@ -30,46 +31,48 @@ def showCalendar():
         ),
     )
 
-    # Event input form
-    with st.form("event_form"):
-        st.write("### Add a New Event")
+    # Event input form inside an expander
+    st.header("Add Events to the Calendar")
+    with st.expander("Add a New Event"):
+        with st.form("event_form"):
+            st.write("### Add a New Event")
 
-        # Input fields for event details
-        title = st.text_input("Event Title")
-        color = st.color_picker("Pick a Color", "#FF6C6C")
-        start_date = st.date_input("Start Date", datetime.date.today())
-        end_date = st.date_input("End Date", datetime.date.today())
-        start_time = st.time_input("Start Time", datetime.time(9, 0))
-        end_time = st.time_input("End Time", datetime.time(10, 0))
-        resource_id = st.selectbox(
-            "Resource ID", ["a", "b", "c", "d", "e", "f"], index=0
-        )
+            # Input fields for event details
+            title = st.text_input("Event Title")
+            color = st.color_picker("Pick a Color", "#FF6C6C")
+            start_date = st.date_input("Start Date", datetime.date.today())
+            end_date = st.date_input("End Date", datetime.date.today())
+            start_time = st.time_input("Start Time", datetime.time(9, 0))
+            end_time = st.time_input("End Time", datetime.time(10, 0))
+            resource_id = st.selectbox(
+                "Resource ID", ["a", "b", "c", "d", "e", "f"], index=0
+            )
 
-        # Submit button for the form
-        submitted = st.form_submit_button("Add Event")
+            # Submit button for the form
+            submitted = st.form_submit_button("Add Event")
 
-        if submitted:
-            # Check if the end date is before the start date
-            if end_date < start_date:
-                st.error("End date cannot be before start date. Please select a valid date range.")
-            else:
-                # Calculate the number of days between start and end dates
-                num_days = (end_date - start_date).days + 1
+            if submitted:
+                # Check if the end date is before the start date
+                if end_date < start_date:
+                    st.error("End date cannot be before start date. Please select a valid date range.")
+                else:
+                    # Calculate the number of days between start and end dates
+                    num_days = (end_date - start_date).days + 1
 
-                # Create separate events for each day within the date range
-                for i in range(num_days):
-                    event_date = start_date + datetime.timedelta(days=i)
-                    new_event = {
-                        "id": str(uuid.uuid4()),  # Add unique id
-                        "title": title,
-                        "color": color,
-                        "start": f"{event_date}T{start_time}",
-                        "end": f"{event_date}T{end_time}",
-                        "resourceId": resource_id,
-                    }
-                    if new_event not in st.session_state["events"] and new_event["title"]:
-                        st.session_state["events"].append(new_event)
-                st.success(f"✅ Event '{title}' added!")
+                    # Create separate events for each day within the date range
+                    for i in range(num_days):
+                        event_date = start_date + datetime.timedelta(days=i)
+                        new_event = {
+                            "id": str(uuid.uuid4()),  # Add unique id
+                            "title": title,
+                            "color": color,
+                            "start": f"{event_date}T{start_time}",
+                            "end": f"{event_date}T{end_time}",
+                            "resourceId": resource_id,
+                        }
+                        if new_event not in st.session_state["events"] and new_event["title"]:
+                            st.session_state["events"].append(new_event)
+                    st.success(f"✅ Event '{title}' added!")
 
     # Calendar resources
     calendar_resources = [
