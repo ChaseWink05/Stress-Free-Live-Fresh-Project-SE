@@ -7,6 +7,6 @@ def popup():
         st.session_state["last_popup"] = time.time()
 
     # Show pop-up every 10 seconds
-    if time.time() - st.session_state["last_popup"] > 10:  # Change 10 to any interval you want
+    if time.time() - st.session_state["last_popup"] > 1:  # Change 10 to any interval you want
         st.toast("🔔 Reminder: Check your calendar!", icon="📅")
         st.session_state["last_popup"] = time.time()  # Reset timer
